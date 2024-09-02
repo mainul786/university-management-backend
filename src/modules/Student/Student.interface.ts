@@ -23,19 +23,21 @@ export type TUserName = {
 
 export type TStudent = {
   id: string;
+  password: string;
   name: TUserName;
   gender: 'Male' | 'Female';
   dateOfBirth: string;
   email: string;
   contactNo: string;
   emargencyContactNo: string;
-  bloodGroup: 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-';
+  bloodGroup?: 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-';
   presentAddress: string;
   parmenatAddress: string;
   guardian: TGurdian;
   localGrudian: TLocalGurdian;
-  profileImg: string;
+  profileImg?: string;
   isActive: 'active' | 'blocked';
+  isDeleted: boolean;
 };
 
 export type studentMethod = {

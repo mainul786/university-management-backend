@@ -7,7 +7,8 @@ import {
   TUserName,
   StudentModel,
 } from './Student.interface';
-
+import bcrypt from 'bcrypt';
+import config from '../../config';
 const userSchema = new Schema<TUserName>({
   firstName: {
     type: String,
@@ -36,35 +37,79 @@ const localGrudianSchema = new Schema<TLocalGurdian>({
   contactNo: { type: String, required: true },
   address: { type: String, required: true },
 });
-const studentSchema = new Schema<TStudent, StudentModel, studentMethod>({
-  id: { type: String },
-  name: {
-    type: userSchema,
-    required: [true, 'name is  required'],
+const studentSchema = new Schema<TStudent, StudentModel, studentMethod>(
+  {
+    id: { type: String },
+    password: { type: String },
+    name: {
+      type: userSchema,
+      required: [true, 'name is  required'],
+    },
+    gender: { type: String, required: true, enum: ['Male', 'Female'] },
+    dateOfBirth: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    contactNo: { type: String, required: true },
+    emargencyContactNo: { type: String, required: true },
+    bloodGroup: {
+      type: String,
+      enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
+    },
+    presentAddress: { type: String, required: true },
+    parmenatAddress: { type: String, required: true },
+    guardian: gurdianSchema,
+    localGrudian: localGrudianSchema,
+    profileImg: { type: String, required: true },
+    isActive: {
+      type: String,
+      enum: ['active', 'blocked'],
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
   },
-  gender: { type: String, required: true, enum: ['Male', 'Female'] },
-  dateOfBirth: { type: String, required: true },
-  email: { type: String, required: true },
-  contactNo: { type: String, required: true },
-  emargencyContactNo: { type: String, required: true },
-  bloodGroup: {
-    type: String,
-    enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
+  {
+    toJSON: { virtuals: true },
   },
-  presentAddress: { type: String, required: true },
-  parmenatAddress: { type: String, required: true },
-  guardian: gurdianSchema,
-  localGrudian: localGrudianSchema,
-  profileImg: { type: String, required: true },
-  isActive: {
-    type: String,
-    enum: ['active', 'blocked'],
-  },
+);
+// virtuals Methods
+studentSchema.virtual('fullname').get(function () {
+  return `${this.name.firstName}   ${this.name.middleName}  ${this.name.lastName}`;
 });
 
+// instance method
 studentSchema.methods.isUserExists = async function (id: string) {
   const existsUser = await Student.findOne({ id });
   return existsUser;
 };
 
+// document Middleware
+studentSchema.pre('save', async function (next) {
+  const user = this;
+  user.password = await bcrypt.hash(user.password, Number(config.salt_round));
+  next();
+  // Document middleware
+});
+studentSchema.post('save', function (doc, next) {
+  doc.password = '';
+  next();
+});
+
+// Query Middleware
+studentSchema.pre('find', function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+
+// query MiddleWire
+studentSchema.pre('findOne', function (next) {
+  this.findOne({ isDeleted: false });
+  next();
+});
+
+// aggreate Pipeline Middlewire
+studentSchema.pre('aggregate', function (next) {
+  this.pipeline().unshift({ $match: { isDeleted: false } });
+  next();
+});
 export const Student = model<TStudent, StudentModel>('Student', studentSchema);

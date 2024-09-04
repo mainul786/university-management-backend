@@ -7,8 +7,7 @@ import {
   TUserName,
   StudentModel,
 } from './Student.interface';
-import bcrypt from 'bcrypt';
-import config from '../../config';
+
 const userSchema = new Schema<TUserName>({
   firstName: {
     type: String,
@@ -40,7 +39,12 @@ const localGrudianSchema = new Schema<TLocalGurdian>({
 const studentSchema = new Schema<TStudent, StudentModel, studentMethod>(
   {
     id: { type: String },
-    password: { type: String },
+    user: {
+      type: Schema.Types.ObjectId,
+      required: [true, 'user id is required'],
+      unique: true,
+      ref: 'User',
+    },
     name: {
       type: userSchema,
       required: [true, 'name is  required'],
@@ -59,10 +63,6 @@ const studentSchema = new Schema<TStudent, StudentModel, studentMethod>(
     guardian: gurdianSchema,
     localGrudian: localGrudianSchema,
     profileImg: { type: String, required: true },
-    isActive: {
-      type: String,
-      enum: ['active', 'blocked'],
-    },
     isDeleted: {
       type: Boolean,
       default: false,
@@ -83,18 +83,6 @@ studentSchema.methods.isUserExists = async function (id: string) {
   return existsUser;
 };
 
-// document Middleware
-studentSchema.pre('save', async function (next) {
-  const user = this;
-  user.password = await bcrypt.hash(user.password, Number(config.salt_round));
-  next();
-  // Document middleware
-});
-studentSchema.post('save', function (doc, next) {
-  doc.password = '';
-  next();
-});
-
 // Query Middleware
 studentSchema.pre('find', function (next) {
   this.find({ isDeleted: { $ne: true } });
@@ -103,7 +91,7 @@ studentSchema.pre('find', function (next) {
 
 // query MiddleWire
 studentSchema.pre('findOne', function (next) {
-  this.findOne({ isDeleted: false });
+  this.find({ isDeleted: { $ne: true } });
   next();
 });
 

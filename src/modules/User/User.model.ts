@@ -1,5 +1,7 @@
+import config from '../../config';
 import { model, Schema } from 'mongoose';
 import { TUser } from './User.interface';
+import bcrypt from 'bcrypt';
 
 const userSchema = new Schema<TUser>(
   {
@@ -13,7 +15,6 @@ const userSchema = new Schema<TUser>(
     },
     needsPasswordChange: {
       type: Boolean,
-      required: true,
     },
     role: {
       type: String,
@@ -22,6 +23,7 @@ const userSchema = new Schema<TUser>(
     status: {
       type: String,
       enum: ['in-progress', 'blocked'],
+      default: 'in-progress',
     },
     isDeleted: {
       type: Boolean,
@@ -33,4 +35,15 @@ const userSchema = new Schema<TUser>(
   },
 );
 
-export const User = model<TUser>('user', userSchema);
+userSchema.pre('save', async function (next) {
+  const user = this;
+  user.password = await bcrypt.hash(user.password, Number(config.salt_round));
+  next();
+  // Document middleware
+});
+userSchema.post('save', function (doc, next) {
+  doc.password = '';
+  next();
+});
+
+export const User = model<TUser>('User', userSchema);

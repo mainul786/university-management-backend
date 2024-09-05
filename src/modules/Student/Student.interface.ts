@@ -36,7 +36,6 @@ export type TStudent = {
   guardian: TGurdian;
   localGrudian: TLocalGurdian;
   profileImg?: string;
-  isDeleted: boolean;
 };
 
 export type studentMethod = {

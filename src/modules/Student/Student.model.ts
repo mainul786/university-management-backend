@@ -38,7 +38,9 @@ const localGrudianSchema = new Schema<TLocalGurdian>({
 });
 const studentSchema = new Schema<TStudent, StudentModel, studentMethod>(
   {
-    id: { type: String },
+    id: {
+      type: String,
+    },
     user: {
       type: Schema.Types.ObjectId,
       required: [true, 'user id is required'],
@@ -63,10 +65,6 @@ const studentSchema = new Schema<TStudent, StudentModel, studentMethod>(
     guardian: gurdianSchema,
     localGrudian: localGrudianSchema,
     profileImg: { type: String, required: true },
-    isDeleted: {
-      type: Boolean,
-      default: false,
-    },
   },
   {
     toJSON: { virtuals: true },

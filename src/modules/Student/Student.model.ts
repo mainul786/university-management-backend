@@ -40,6 +40,7 @@ const studentSchema = new Schema<TStudent, StudentModel, studentMethod>(
   {
     id: {
       type: String,
+      unique: true,
     },
     user: {
       type: Schema.Types.ObjectId,
@@ -64,6 +65,10 @@ const studentSchema = new Schema<TStudent, StudentModel, studentMethod>(
     parmenatAddress: { type: String, required: true },
     guardian: gurdianSchema,
     localGrudian: localGrudianSchema,
+    admissionSemester: {
+      type: Schema.Types.ObjectId,
+      ref: 'AcademicSemseter',
+    },
     profileImg: { type: String, required: true },
   },
   {

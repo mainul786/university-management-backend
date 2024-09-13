@@ -1,7 +1,11 @@
+import { academicSemestercodeNameMapper } from './AcademicSemester.constant';
 import { AcademicSemester } from './AcademicSemester.model';
 import { TAcademicSemester } from './AcademicSemeter.interface';
 
 const createAcademicSemesterIntoDB = async (payload: TAcademicSemester) => {
+  if (academicSemestercodeNameMapper[payload.name] !== payload.code) {
+    throw new Error('Invalid semester code');
+  }
   const result = await AcademicSemester.create(payload);
   return result;
 };

@@ -35,6 +35,7 @@ export type TStudent = {
   parmenatAddress: string;
   guardian: TGurdian;
   localGrudian: TLocalGurdian;
+  admissionSemester: Types.ObjectId;
   profileImg?: string;
 };
 

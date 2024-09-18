@@ -6,7 +6,7 @@ const globalErrorHanlaler = (
   res: Response,
   next: NextFunction,
 ) => {
-  let statusCode = 500;
+  const statusCode = err.statusCode || 500;
   let message = err.message || 'something went is wrong!';
   return res.status(statusCode).json({
     success: false,

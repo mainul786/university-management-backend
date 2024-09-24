@@ -1,4 +1,4 @@
-import { ModifiedPathsSnapshot, startSession } from 'mongoose';
+import { startSession } from 'mongoose';
 import { Student } from './Student.model';
 import AppError from '../../errors/AppError';
 import httpStatus from 'http-status';
@@ -70,7 +70,17 @@ const getAllStudentFromDB = async (query: Record<string, unknown>) => {
 
   //   return fieldsQuery;
 
-  const studentQuery = new QueryBuilder(Student.find(), query)
+  const studentQuery = new QueryBuilder(
+    Student.find()
+      .populate('admissionSemester')
+      .populate({
+        path: 'academicDepartment',
+        populate: {
+          path: 'academicFaculty',
+        },
+      }),
+    query,
+  )
     .search(studentSearchAbleFields)
     .filter()
     .sort()

@@ -85,7 +85,7 @@ const studentSchema = new Schema<TStudent, StudentModel, studentMethod>(
 );
 // virtuals Methods
 studentSchema.virtual('fullname').get(function () {
-  return `${this.name.firstName} ${this.name.middleName} ${this.name.lastName}`;
+  return `${this?.name?.firstName} ${this?.name?.middleName} ${this?.name?.lastName}`;
 });
 
 // instance method

@@ -58,22 +58,23 @@ export const findLastFacultyId = async () => {
       createdAt: -1,
     })
     .lean();
-
+  console.log(lastFaculty);
   return lastFaculty?.id ? lastFaculty.id.substring(2) : undefined;
 };
 
 export const generateFacultyId = async () => {
   let currentId = (0).toString();
-  const lastFacultyId = await findLastFacultyId();
 
+  const lastFacultyId = await findLastFacultyId();
+  console.log(lastFacultyId);
   if (lastFacultyId) {
     currentId = lastFacultyId.substring(2);
   }
 
   let incrementId = (Number(currentId) + 1).toString().padStart(4, '0');
 
+  console.log(incrementId);
   incrementId = `F-${incrementId}`;
-
   return incrementId;
 };
 

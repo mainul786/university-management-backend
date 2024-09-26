@@ -15,6 +15,7 @@ import httpStatus from 'http-status';
 import { TFaculty } from '../Faculty/Faculty.interface';
 import { AcademicDepartment } from '../AcademicDepartment/AcademicDepartment.model';
 import { Faculty } from '../Faculty/Faculty.model';
+import { Admin } from '../Admin/Admin.model';
 
 const createStudentIntoDB = async (password: string, payload: TStudent) => {
   // create a object
@@ -71,7 +72,7 @@ const createFacultyIntoDB = async (password: string, payload: TFaculty) => {
   //if password is not given , use deafult password
   userData.password = password || (config.default_password as string);
 
-  //set student role
+  //set faculty role
   userData.role = 'faculty';
 
   // find academic department info

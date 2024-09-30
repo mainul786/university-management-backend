@@ -40,7 +40,7 @@ const moduleRouter = [
     route: AdminRoutes,
   },
   {
-    path: '/couser',
+    path: '/courses',
     route: CourseRouters,
   },
 ];

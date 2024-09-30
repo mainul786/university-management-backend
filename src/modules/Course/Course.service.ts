@@ -1,3 +1,5 @@
+import QueryBuilder from '../../queryBuilder/QueryBuilder';
+import { CourseSearchableFields } from './Course.constant';
 import { TCourse } from './Course.interface';
 import { Course } from './Course.model';
 
@@ -6,9 +8,22 @@ const createCourseIntoDB = async (payload: TCourse) => {
   return result;
 };
 
-const getAllCourseFromDB = async () => {
-  const reuslt = await Course.find();
-  return reuslt;
+const getAllCourseFromDB = async (query: Record<string, unknown>) => {
+  console.log(query);
+  const courseQuery = new QueryBuilder(
+    Course.find(),
+    // .populate('preRequisiteCourses.course'),
+    query,
+  )
+    .search(CourseSearchableFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const result = await courseQuery.modelQuery;
+  console.log(result);
+  return result;
 };
 
 const getSingleCourseFromDB = async (id: string) => {

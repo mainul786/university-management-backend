@@ -1,0 +1,1 @@
+export const SemesterRegistrationStatus = ['UPCOMING', 'ONGOOING', 'ENDED'];

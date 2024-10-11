@@ -18,10 +18,7 @@ router.patch(
   ),
   semesterRegistrationControllers.updateSemesterRegistration,
 );
-router.get(
-  '/:semesterId',
-  semesterRegistrationControllers.singleSemesterRegistration,
-);
+router.get('/:id', semesterRegistrationControllers.singleSemesterRegistration);
 router.get('/', semesterRegistrationControllers.allSemesterRegistration);
 
 export const SemesterRegistrationRoutes = router;

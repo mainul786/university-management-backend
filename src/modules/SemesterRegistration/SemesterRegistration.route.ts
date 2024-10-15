@@ -12,7 +12,7 @@ router.post(
   semesterRegistrationControllers.createSemesterRegistration,
 );
 router.patch(
-  '/:id, ',
+  '/:id',
   validateRequest(
     semesterRegistrationValidations.updateSemesterRegistrationValidation,
   ),

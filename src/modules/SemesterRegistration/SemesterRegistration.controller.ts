@@ -38,11 +38,10 @@ const singleSemesterRegistration = catchAsync(async (req, res) => {
 });
 const updateSemesterRegistration = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const { semester } = req.body;
 
   const result = await SemesterRegistrationServies.updateSemesterRegistration(
     id,
-    semester,
+    req.body,
   );
 
   sendResponse(res, {

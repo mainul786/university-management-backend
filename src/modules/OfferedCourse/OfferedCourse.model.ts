@@ -34,7 +34,7 @@ const offerdCourseSchema = new Schema<TOfferedCourse>(
       required: true,
       ref: 'Faculty',
     },
-    mixCapacity: {
+    maxCapacity: {
       type: Number,
       required: true,
     },

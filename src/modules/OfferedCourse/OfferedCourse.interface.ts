@@ -4,12 +4,12 @@ export type TDays = 'Sun' | 'Mon' | 'Tue' | 'Wed' | 'Thus' | 'Fri' | 'Sat';
 
 export type TOfferedCourse = {
   semesterRegistration: Types.ObjectId;
-  academicSemester: Types.ObjectId;
+  academicSemester?: Types.ObjectId;
   academicFaculty: Types.ObjectId;
   academicDepartment: Types.ObjectId;
   course: Types.ObjectId;
   faculty: Types.ObjectId;
-  mixCapacity: number;
+  maxCapacity: number;
   section: number;
   days: TDays[];
   startTime: string;

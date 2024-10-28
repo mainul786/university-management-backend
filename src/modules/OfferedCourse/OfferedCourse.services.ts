@@ -14,9 +14,10 @@ const createOfferedCourseIntoDB = async (payload: TOfferedCourse) => {
     academicFaculty,
     academicDepartment,
     course,
+    section,
     faculty,
   } = payload;
-
+  // console.log(payload);
   //if check by the id is register or not
   const isSemesterRegistrationExists =
     await SemesterRegistration.findById(semesterRegistration);
@@ -53,7 +54,34 @@ const createOfferedCourseIntoDB = async (payload: TOfferedCourse) => {
     throw new AppError(httpStatus.NOT_FOUND, 'Faculty is not Found!');
   }
 
-  const result = await OfferedCourse.create({ academicSemester, ...payload });
+  // if check the academicDepartment and academicFaculty is avalible or not
+  const isDepartmentBelongToFaculty = await AcademicDepartment.findOne({
+    _id: academicDepartment,
+    academicFaculty,
+  });
+  if (!isDepartmentBelongToFaculty) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      `this ${isAcademicDepartmentExists.name} dont belogs to ${isAcademicFacultyExists}`,
+    );
+  }
+
+  // if same section is avalible
+
+  const isSameSectionExists = await OfferedCourse.findOne({
+    semesterRegistration,
+    course,
+    section,
+  });
+
+  if (isSameSectionExists) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      `Offered course with same section is already exists!`,
+    );
+  }
+
+  const result = await OfferedCourse.create({ ...payload, academicSemester });
   return result;
 };
 

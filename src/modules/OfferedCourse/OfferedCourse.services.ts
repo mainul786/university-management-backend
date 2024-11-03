@@ -190,6 +190,8 @@ const deleteOfferedCourseFromDB = async (id: string) => {
       `you cant not update this offered course as it is ${semesterRegistrationStatus?.status}`,
     );
   }
+  const result = await OfferedCourse.findByIdAndDelete(id);
+  return result;
 };
 
 export const OfferedCourseServices = {

@@ -4,17 +4,21 @@ import validateRequest from '../../middlware/validateRequest';
 import { studentValidations } from '../Student/Student.validation';
 import { FacultyValidations } from '../Faculty/Faculty.validation';
 import { AdminValidations } from '../Admin/Admin.validation';
+import auth from '../../middlware/auth';
+import { USERROLE } from './User.constant';
 
 const router = express.Router();
 
 router.post(
   '/create-student',
+  auth(USERROLE.admin),
   validateRequest(studentValidations.createStudentValidationSchema),
   UserController.createStudent,
 );
 
 router.post(
   '/create-faculty',
+  auth(USERROLE.admin),
   validateRequest(FacultyValidations.createFacultyValidationSchema),
   UserController.createFaculty,
 );

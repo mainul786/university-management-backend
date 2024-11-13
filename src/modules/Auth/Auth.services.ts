@@ -47,6 +47,17 @@ const loginUser = async (payload: TLoginUser) => {
   };
 };
 
-export const LoginUserServices = {
+const passwordChange = async (
+  user: { userId: string; role: string },
+  payload: string,
+) => {
+  const result = await User.findOneAndUpdate({
+    id: user.userId,
+    role: user.role,
+  });
+};
+
+export const AuthServices = {
   loginUser,
+  passwordChange,
 };

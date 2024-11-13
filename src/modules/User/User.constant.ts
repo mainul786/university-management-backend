@@ -1,5 +1,5 @@
 export const USERROLE = {
   student: 'student',
-  facult: 'faculty',
+  faculty: 'faculty',
   admin: 'admin',
 } as const;

@@ -13,4 +13,5 @@ export default {
   jwt_refreshSecret: process.env.REFRESH_SECRET,
   jwt_accessExpiresIn: process.env.ACCESS_EXPIRES_IN,
   jwt_refreshExpiresIn: process.env.REFRESH_EXPIRES_IN,
+  reset_password_ui_link: process.env.RESET_PASSWORD_UI_LINK,
 };

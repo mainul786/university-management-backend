@@ -189,7 +189,28 @@ const forgetPassword = async (id: string) => {
   );
   const resetUILink = `${config.reset_password_ui_link}?id=${user?.id}&token=${resetToken}`;
   sendEmail(user?.email, resetUILink);
-  // console.log(resetUILink);
+  console.log(resetUILink);
+};
+
+const resetPassword = async (
+  payload: { id: string; newPassword: string },
+  token: string | undefined,
+) => {
+  const user = await User.isUserExistsByCustomId(payload?.id);
+
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, 'user does`t found');
+  }
+
+  const isUserDeleted = user?.isDeleted;
+  if (isUserDeleted) {
+    throw new AppError(httpStatus.BAD_REQUEST, 'User does`t exists!');
+  }
+
+  const isUserBlocked = user?.status;
+  if (isUserBlocked === 'blocked') {
+    throw new AppError(httpStatus.BAD_REQUEST, 'user does`t exists!');
+  }
 };
 
 export const AuthServices = {
@@ -197,4 +218,5 @@ export const AuthServices = {
   passwordChange,
   refreshToken,
   forgetPassword,
+  resetPassword,
 };

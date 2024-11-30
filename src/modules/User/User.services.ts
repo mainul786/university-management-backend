@@ -16,6 +16,7 @@ import { TFaculty } from '../Faculty/Faculty.interface';
 import { AcademicDepartment } from '../AcademicDepartment/AcademicDepartment.model';
 import { Faculty } from '../Faculty/Faculty.model';
 import { Admin } from '../Admin/Admin.model';
+import { verifyToken } from '../Auth/Auth.utils';
 
 const createStudentIntoDB = async (password: string, payload: TStudent) => {
   // create a object
@@ -173,8 +174,27 @@ const createAdminIntoDB = async (password: string, payload: TFaculty) => {
   }
 };
 
+const getMe = async (token: string) => {
+  const decoded = verifyToken(token, config.jwt_accessSecret as string);
+  const { userId, role } = decoded;
+
+  let result = null;
+
+  if (role === 'admin') {
+    result = await Admin.findOne({ id: userId });
+  }
+  if (role === 'faculty') {
+    result = await Faculty.findOne({ id: userId });
+  }
+  if (role === 'student') {
+    result = await Student.findOne({ id: userId });
+  }
+  return result;
+};
+
 export const UserServices = {
   createStudentIntoDB,
   createFacultyIntoDB,
   createAdminIntoDB,
+  getMe,
 };

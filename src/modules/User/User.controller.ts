@@ -6,13 +6,15 @@ import { AuthServices } from '../Auth/Auth.services';
 import AppError from '../../errors/AppError';
 
 const createStudent = catchAsync(async (req, res) => {
-  const { password, student } = req.body;
-  const result = await UserServices.createStudentIntoDB(password, student);
+  console.log(req.file);
+  console.log(req.body);
+  // const { password, student } = req.body;
+  // const result = await UserServices.createStudentIntoDB(password, student);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Student created successfully',
-    data: result,
+    data: null,
   });
 });
 

@@ -2,19 +2,19 @@ import { UserServices } from './User.services';
 import sendResponse from '../../utils/sendResponse';
 import httpStatus from 'http-status';
 import catchAsync from '../../utils/catchAsync';
-import { AuthServices } from '../Auth/Auth.services';
-import AppError from '../../errors/AppError';
 
 const createStudent = catchAsync(async (req, res) => {
-  console.log(req.file);
-  console.log(req.body);
-  // const { password, student } = req.body;
-  // const result = await UserServices.createStudentIntoDB(password, student);
+  const { password, student } = req.body;
+  const result = await UserServices.createStudentIntoDB(
+    req.file,
+    password,
+    student,
+  );
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Student created successfully',
-    data: null,
+    data: result,
   });
 });
 

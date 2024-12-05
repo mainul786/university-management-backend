@@ -19,7 +19,11 @@ import { Admin } from '../Admin/Admin.model';
 import { verifyToken } from '../Auth/Auth.utils';
 import { sendImageToCloudinary } from '../../utils/sendImageToCloudinary';
 
-const createStudentIntoDB = async (password: string, payload: TStudent) => {
+const createStudentIntoDB = async (
+  file: any,
+  password: string,
+  payload: TStudent,
+) => {
   // create a object
   const userData: Partial<TUser> = {};
   // set student roll
@@ -44,7 +48,10 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
     session.startTransaction();
     userData.id = await generateStudentId(admissionSemester);
 
-    sendImageToCloudinary();
+    const imageName = `${userData.id}${payload?.name?.firstName}`;
+    const path = file?.path;
+
+    const { secure_url } = await sendImageToCloudinary(imageName, path);
 
     const newUser = await User.create([userData], { session });
 
@@ -53,6 +60,7 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
     }
     payload.id = newUser[0].id;
     payload.user = newUser[0]._id;
+    payload.profileImg = secure_url;
 
     const newStudent = await Student.create([payload], { session });
     if (!newStudent.length) {

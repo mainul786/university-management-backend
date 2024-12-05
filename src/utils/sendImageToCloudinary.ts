@@ -1,27 +1,39 @@
 import { v2 as cloudinary } from 'cloudinary';
 import multer from 'multer';
 import config from '../config';
-export const sendImageToCloudinary = async () => {
-  // Configuration
-  cloudinary.config({
-    cloud_name: config.cloud_name,
-    api_key: config.cloud_api_key,
-    api_secret: config.cloud_api_secret, // Click 'View API Keys' above to copy your API secret
-  });
+import fs from 'fs';
 
-  // Upload an image
-  const uploadResult = await cloudinary.uploader
-    .upload(
-      'https://res.cloudinary.com/demo/image/upload/getting-started/shoes.jpg',
+// Configuration
+cloudinary.config({
+  cloud_name: config.cloud_name,
+  api_key: config.cloud_api_key,
+  api_secret: config.cloud_api_secret, // Click 'View API Keys' above to copy your API secret
+});
+
+export const sendImageToCloudinary = (imageName: string, path: string) => {
+  return new Promise((resolve, reject) => {
+    // Upload an image
+    cloudinary.uploader.upload(
+      path,
       {
-        public_id: 'shoes',
+        public_id: imageName,
       },
-    )
-    .catch((error) => {
-      console.log(error);
-    });
-
-  console.log(uploadResult);
+      function (error, result) {
+        if (error) {
+          reject(error);
+        }
+        resolve(result);
+        //delete a file asynchronously
+        fs.unlink(path, (error) => {
+          if (error) {
+            console.error('An error occured', error);
+          } else {
+            console.log('File deleted successfully!');
+          }
+        });
+      },
+    );
+  });
 };
 
 const storage = multer.diskStorage({

@@ -1,4 +1,5 @@
 import { Types } from 'mongoose';
+import { Faculty } from './../Faculty/Faculty.model';
 
 export type TGrade = 'A' | 'B' | 'C' | 'D' | 'F' | 'NA';
 
@@ -17,6 +18,7 @@ export type TEnrolledCourse = {
   offeredCourse: Types.ObjectId;
   course: Types.ObjectId;
   student: Types.ObjectId;
+  faculty: Types.ObjectId;
   isEnrolled: boolean;
   courseMarks: TCourseMarks;
   grade: TGrade;

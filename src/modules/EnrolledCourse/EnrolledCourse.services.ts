@@ -136,6 +136,40 @@ const createEnrolledCourseIntoDB = async (
   }
 };
 
+const updateEnrolledCourseMarks = async (
+  facultyId: string,
+  payload: Partial<TEnrolledCourse>,
+) => {
+  const { semesterRegistration, offeredCourse, student, courseMarks } = payload;
+
+  const isSemesterRegistrationExists =
+    await SemesterRegistration.findById(semesterRegistration);
+  if (!isSemesterRegistrationExists) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      'semesterRegistration does not exists!',
+    );
+  }
+
+  const isOfferedCourseExists = await OfferedCourse.findById(offeredCourse);
+  if (!isOfferedCourseExists) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      'offered course does not exists!',
+    );
+  }
+
+  const isStudent = await Student.findById(student);
+  if (!isStudent) {
+    throw new AppError(httpStatus.BAD_REQUEST, 'student does not exists!');
+  }
+  // const result = await EnrolledCourse.findByIdAndUpdate(facultyId, payload, {
+  //   new: true,
+  // });
+  // return result;
+};
+
 export const enrolledCourseServices = {
   createEnrolledCourseIntoDB,
+  updateEnrolledCourseMarks,
 };

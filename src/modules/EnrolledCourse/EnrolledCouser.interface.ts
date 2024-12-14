@@ -3,10 +3,10 @@ import { Faculty } from './../Faculty/Faculty.model';
 
 export type TGrade = 'A' | 'B' | 'C' | 'D' | 'F' | 'NA';
 
-export type TCourseMarks = {
+export type TEnrolledCourseMarks = {
   classTest1: number;
   midterm: number;
-  classTest: number;
+  classTest2: number;
   finalTerm: number;
 };
 
@@ -20,7 +20,7 @@ export type TEnrolledCourse = {
   student: Types.ObjectId;
   faculty: Types.ObjectId;
   isEnrolled: boolean;
-  courseMarks: TCourseMarks;
+  courseMarks: TEnrolledCourseMarks;
   grade: TGrade;
   gradePoints: number;
   isCompleted: boolean;

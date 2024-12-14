@@ -1,22 +1,33 @@
 import { model, Schema, Types } from 'mongoose';
-import { TCourseMarks, TEnrolledCourse } from './EnrolledCouser.interface';
+import {
+  TEnrolledCourseMarks,
+  TEnrolledCourse,
+} from './EnrolledCouser.interface';
 import { Grade } from './EnrolledCourse.constant';
 
-const courseMarksSchema = new Schema<TCourseMarks>({
+const courseMarksSchema = new Schema<TEnrolledCourseMarks>({
   classTest1: {
     type: Number,
+    min: 0,
+    max: 10,
     default: 0,
   },
   midterm: {
     type: Number,
+    min: 0,
+    max: 30,
     default: 0,
   },
-  classTest: {
+  classTest2: {
     type: Number,
+    min: 0,
+    max: 10,
     default: 0,
   },
   finalTerm: {
     type: Number,
+    min: 0,
+    max: 50,
     default: 0,
   },
 });

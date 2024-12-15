@@ -5,7 +5,7 @@ export type TGrade = 'A' | 'B' | 'C' | 'D' | 'F' | 'NA';
 
 export type TEnrolledCourseMarks = {
   classTest1: number;
-  midterm: number;
+  midTerm: number;
   classTest2: number;
   finalTerm: number;
 };

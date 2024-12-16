@@ -1,4 +1,5 @@
 export const USERROLE = {
+  superAdmin: 'super-admin',
   student: 'student',
   faculty: 'faculty',
   admin: 'admin',

@@ -77,7 +77,11 @@ const studentSchema = new Schema<TStudent, StudentModel, studentMethod>(
       type: Schema.Types.ObjectId,
       ref: 'AcademicDepartment',
     },
-    profileImg: { type: String, required: true },
+    academicFaclty: {
+      type: Schema.Types.ObjectId,
+      ref: 'AcademicFaculty',
+    },
+    profileImg: { type: String, default: '', required: true },
   },
   {
     toJSON: { virtuals: true },

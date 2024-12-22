@@ -7,6 +7,7 @@ import AppError from '../../errors/AppError';
 import httpStatus from 'http-status';
 
 const createCourseIntoDB = async (payload: TCourse) => {
+  console.log(payload);
   const result = await Course.create(payload);
   return result;
 };

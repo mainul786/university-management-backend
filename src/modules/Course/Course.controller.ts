@@ -4,6 +4,7 @@ import { CourseServices } from './Course.service';
 import sendResponse from '../../utils/sendResponse';
 
 const createCourse = catchAsync(async (req, res) => {
+  console.log(req.body);
   const result = await CourseServices.createCourseIntoDB(req.body);
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -64,6 +65,7 @@ const assignFacultiesWithCourse = catchAsync(async (req, res) => {
 const removeFacultiesWithCourse = catchAsync(async (req, res) => {
   const { courseId } = req.params;
   const { faculties } = req.body;
+
   const result = await CourseServices.removeFacultiesWithCourseFromDB(
     courseId,
     faculties,

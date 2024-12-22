@@ -9,15 +9,24 @@ const router = express.Router();
 
 router.get(
   '/',
-  auth(USERROLE.admin, USERROLE.faculty),
+  auth(USERROLE.admin, USERROLE.superAdmin, USERROLE.faculty),
   FacultyControllers.getAllFaculty,
 );
-router.get('/:id', FacultyControllers.singleFaculty);
+router.get(
+  '/:id',
+  auth(USERROLE.admin, USERROLE.superAdmin, USERROLE.faculty),
+  FacultyControllers.singleFaculty,
+);
 router.patch(
   '/:id',
+  auth(USERROLE.admin, USERROLE.superAdmin, USERROLE.faculty),
   validateRequest(FacultyValidations.updateFacultyValidationSchema),
   FacultyControllers.updateFaculty,
 );
-router.delete('/:id', FacultyControllers.deleteFaculty);
+router.delete(
+  '/:id',
+  auth(USERROLE.admin, USERROLE.superAdmin),
+  FacultyControllers.deleteFaculty,
+);
 
 export const FacultyRouters = router;

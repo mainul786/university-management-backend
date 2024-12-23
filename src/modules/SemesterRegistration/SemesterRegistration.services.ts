@@ -46,8 +46,7 @@ const createSemesterRegistration = async (payload: TSemesterRegistration) => {
     );
   }
 
-  const result = SemesterRegistration.create(payload);
-  console.log(result);
+  const result = await SemesterRegistration.create(payload);
   return result;
 };
 
@@ -72,11 +71,12 @@ const updateSemesterRegistration = async (
   id: string,
   payload: Partial<TSemesterRegistration>,
 ) => {
-  console.log({ _id: id }, { payload });
+  // console.log({ _id: id }, { payload });
   // already register or not
   const isSemesterRegistrationExists = await SemesterRegistration.findById({
-    id,
+    _id: id,
   });
+
   if (!isSemesterRegistrationExists) {
     throw new AppError(httpStatus.NOT_FOUND, `This semester is not found!`);
   }

@@ -36,6 +36,11 @@ router.put(
   validateRequest(CourseValidation.facultiesWithCourseValidation),
   CourseController.assignFacultiesWithCourse,
 );
+router.get(
+  '/:courseId/get-faculties',
+  auth(USERROLE.superAdmin, USERROLE.admin, USERROLE.faculty),
+  CourseController.getFacultiesWithCourse,
+);
 
 router.delete(
   '/:courseId/remove-faculties',

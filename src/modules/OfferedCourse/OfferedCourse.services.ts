@@ -8,6 +8,8 @@ import { AcademicDepartment } from '../AcademicDepartment/AcademicDepartment.mod
 import { Course } from '../Course/Course.model';
 import { Faculty } from '../Faculty/Faculty.model';
 import { hasTimeConflict } from './OfferedCourse.utils';
+import QueryBuilder from '../../queryBuilder/QueryBuilder';
+import { Student } from '../Student/Student.model';
 
 const createOfferedCourseIntoDB = async (payload: TOfferedCourse) => {
   const {
@@ -109,9 +111,30 @@ const createOfferedCourseIntoDB = async (payload: TOfferedCourse) => {
   return result;
 };
 
-const findAllOfferedCourseFromDB = async () => {
-  const result = await OfferedCourse.find();
-  return result;
+const findAllOfferedCourseFromDB = async (query: Record<string, unknown>) => {
+  const offeredCourseQuery = new QueryBuilder(OfferedCourse.find(), query)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+  const result = await offeredCourseQuery.modelQuery;
+  const meta = await offeredCourseQuery.countTotal();
+  return {
+    result,
+    meta,
+  };
+};
+const findMyOfferedCourseFromDB = async (userId: string) => {
+  const student = await Student.findOne({ id: userId });
+  //find the student
+  if (!student) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Student is not Found!');
+  }
+  //find current ongoing semester
+  const currentOngoingSemester = await SemesterRegistration.findOne({
+    status: 'ONGOING',
+  });
+  return currentOngoingSemester;
 };
 
 const findSingleOfferedCourseFromDB = async (id: string) => {
@@ -197,6 +220,7 @@ const deleteOfferedCourseFromDB = async (id: string) => {
 export const OfferedCourseServices = {
   createOfferedCourseIntoDB,
   findAllOfferedCourseFromDB,
+  findMyOfferedCourseFromDB,
   findSingleOfferedCourseFromDB,
   updateOfferedCourseIntoDB,
   deleteOfferedCourseFromDB,

@@ -196,14 +196,23 @@ const findMyOfferedCourseFromDB = async (userId: string) => {
     },
     {
       $addFields: {
-        $in: [
-          'course._id',
-          {
-            $map: {
-              input: '',
+        isAlreadyEnrolled: {
+          $in: [
+            'course._id',
+            {
+              $map: {
+                input: '$enrolledCourses',
+                as: 'enroll',
+                in: '$$enroll.course',
+              },
             },
-          },
-        ],
+          ],
+        },
+      },
+    },
+    {
+      $match: {
+        isAlreadyEnrolled: false,
       },
     },
   ]);
